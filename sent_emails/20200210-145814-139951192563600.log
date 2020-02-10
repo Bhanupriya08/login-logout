@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on 127.0.0.1:8000
+From: jakharinfotech.test@gmail.com
+To: cs100priya@gmail.com
+Date: Mon, 10 Feb 2020 09:28:14 -0000
+Message-ID: <158132689407.31050.16349905580197261737@F2>
+
+
+You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8000.
+
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8000/blog/reset/Ng/5dv-0861d20f9ad35ff1540c/
+
+Your username, in case you’ve forgotten: priya
+
+Thanks for using our site!
+
+The 127.0.0.1:8000 team
+
+
+
+-------------------------------------------------------------------------------
