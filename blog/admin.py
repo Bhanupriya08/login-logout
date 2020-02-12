@@ -22,7 +22,7 @@ admin.site.register(Post,PostAdmin)
 
 class CommentAdmin(admin.ModelAdmin):
 	model = Comment
-	list_display = ('post','author','text','created_date')
+	list_display = ('post','author','text','created_date','parent','parent_id')
 	list_filter = ("created_date",)
 
 admin.site.register(Comment,CommentAdmin)

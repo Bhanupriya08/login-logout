@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import UserLoginForm,PostForm,Subscribe,CommentForm
 from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.views.generic.edit import CreateView
 from django.contrib.auth import login, authenticate,logout
 from .models import CustomUser,Post,Comment
@@ -94,14 +94,36 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_new.html', {'form': form})
 
-
-
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     print(post.author)
     user = request.user
     print(user)
     return render(request, 'blog/post_detail.html', {'post': post,"user":user})
+
+"""def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comment = post.comments.filter( parent__isnull= True)
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST or None)
+        if comment_form.is_valid():
+            parent_id = request.POST.get('comment_id')
+            comment_os = None
+            if parent_id:
+                comment_os = Comment.objects.get(id=parent_id)  
+
+            comment = Comment.objects.create(post=post,parent=comment_os)
+            comment.save()
+
+            
+            return redirect('blog:post_detail',pk=post.pk)
+
+    form = CommentForm()
+    print(post.author)
+    user = request.user
+    print(user)
+    return render(request, 'blog/post_detail.html', 
+        {'post': post,"user":user,'form':form,'comment':comment})"""
 
 def myblogs(request):
     user = request.user
@@ -144,6 +166,15 @@ def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('blog:post_detail', pk=comment.post.pk)
+
+"""def reply(request,pk):
+    post = get_object_or_404(Comment, pk=pk)
+    if request.method == "POST":
+        form = ReplyForm(request.POST)
+        if form.is_valid():"""
+
+
+
 
 #---comment ends here---->***********
 

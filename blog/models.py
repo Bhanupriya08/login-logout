@@ -33,13 +33,31 @@ class Comment(models.Model):
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies',on_delete=models.CASCADE)
 
     def approve(self):
         self.approved_comment = True
         self.save()
 
+    class Meta:
+        # sort comments in chronological order by default
+        ordering = ('-created_date',)
+
+    def children(self):
+        return Comment.objects.filter(parent=self)
+
+    @property
+    def is_parent(self):
+        if self.parent is not None:
+            return False
+        return True
+
+
     def __str__(self):
         return self.text
+
+
+
         
 
 
