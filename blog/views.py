@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from .forms import UserLoginForm,PostForm
+from .forms import UserLoginForm,PostForm,Subscribe
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
@@ -8,6 +8,9 @@ from django.contrib.auth import login, authenticate,logout
 from .models import CustomUser,Post
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.template.loader import render_to_string
+from myproject.settings import EMAIL_HOST_USER
+from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -19,11 +22,13 @@ from django.utils import timezone
 
 
 def home(request):
+
     return render(request,'blog/home.html')
 
 def log_out(request):
     logout(request)
-    return redirect('home')
+    posts = Post.objects.all()
+    return render(request, 'blog/post_list.html', {"posts" : posts })
 
 def signup(request):
     if request.method == 'POST':
@@ -40,6 +45,32 @@ def signup(request):
     else:
         form = UserLoginForm()
         return render(request, 'blog/signup.html', {'form': form})
+
+
+def subscribe(request):
+    form = Subscribe(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            #email = 'cs100priya@gmail.com'
+            email = form.cleaned_data['Email']
+            html_message = render_to_string('blog/email.html')
+            message = "hello"
+            subject="Blog subscribe"
+            print(email)
+            send_mail(subject,message=message,from_email=EMAIL_HOST_USER,recipient_list=[email,],html_message=html_message)
+            return render(request,'blog/success_email.html',{'email':email })
+        else:
+            error = "invalid form"
+            return render(request, 'blog/subscribe.html', {'form':form,'error':error})
+    
+    return render(request, 'blog/subscribe.html',{'form':form} )
+
+    
+
+
+
+    
+
 
 def post_list(request):
     posts = Post.objects.all()
