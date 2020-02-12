@@ -11,6 +11,9 @@
             {% if post.image %}
             <p><img src="{{ post.image.url}}" height="250" width="400"></p>
             {% endif %}
+            <!--<a href="{% url 'blog:post_detail' pk=post.pk %}">Comments: {{ post.comments.count }}</a>-->
+            <hr>
+            <a href="{% url 'blog:post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
             
             
         </div>

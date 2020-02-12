@@ -1,11 +1,11 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from .forms import UserLoginForm,PostForm,Subscribe
+from .forms import UserLoginForm,PostForm,Subscribe,CommentForm
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.contrib.auth import login, authenticate,logout
-from .models import CustomUser,Post
+from .models import CustomUser,Post,Comment
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.template.loader import render_to_string
@@ -53,7 +53,7 @@ def subscribe(request):
         if form.is_valid():
             #email = 'cs100priya@gmail.com'
             email = form.cleaned_data['Email']
-            html_message = render_to_string('blog/email.html')
+            html_message = render_to_string('blog/email.html',{'msg':'thanks for choosing us'})
             message = "hello"
             subject="Blog subscribe"
             print(email)
@@ -94,6 +94,8 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_new.html', {'form': form})
 
+
+
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     print(post.author)
@@ -106,6 +108,46 @@ def myblogs(request):
     print(user)
     post = Post.objects.filter(author=user)
     return render(request, 'blog/post_list.html', {'post': post,"user":user})
+
+
+
+
+
+#----to add comment on blog post---functions---->**********
+def add_comment_to_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('blog:post_detail', pk=post.pk)
+    else:
+        form = CommentForm()
+    return render(request, 'blog/add_comment_to_post.html', {'form': form})
+
+
+def approved_comments(self):
+    return self.comments.filter(approved_comment=True)
+
+
+@login_required
+def comment_approve(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.approve()
+    return redirect('blog:post_detail', pk=comment.post.pk)
+
+
+@login_required
+def comment_remove(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.delete()
+    return redirect('blog:post_detail', pk=comment.post.pk)
+
+#---comment ends here---->***********
+
+
 
 
 
