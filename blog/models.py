@@ -30,10 +30,11 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name='comments')
     author = models.CharField(max_length=200)
+    active = models.BooleanField(default=True)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
-    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies',on_delete=models.CASCADE)
+    reply = models.ForeignKey('self', null=True, blank=True, related_name='replies',on_delete=models.CASCADE)
 
     def approve(self):
         self.approved_comment = True
@@ -43,14 +44,9 @@ class Comment(models.Model):
         # sort comments in chronological order by default
         ordering = ('-created_date',)
 
-    def children(self):
-        return Comment.objects.filter(parent=self)
+    
 
-    @property
-    def is_parent(self):
-        if self.parent is not None:
-            return False
-        return True
+  
 
 
     def __str__(self):

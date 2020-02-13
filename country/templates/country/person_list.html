@@ -1,0 +1,89 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+
+  <h2>Person Form</h2>
+  <form method="post" id="personForm" data-cities-url="{% url 'country:ajax_load_cities' %}" novalidate>
+    {% csrf_token %}
+    <table>
+    	{{ form.as_p }}
+    </table>
+      
+    
+    <button type="submit">Save</button>
+    <a href="{% url 'country:person_list' %}">Nevermind</a>
+  </form>
+
+  <div>
+  	
+  	<form action="" method="get" accept-charset="utf-8">
+<select name="country" id="country">
+	<option value="0">Select a country</option>
+	{% for country in country_list %}
+	<option value="{{ country.id}}">{{ country.country }}</option>
+	{% endfor %}
+</select>
+<select name="state" id="state" disabled="true">
+<option>Select a state</option>
+</select>
+</form>
+  </div>
+
+<script>
+	
+	$(document).ready(
+		function() {
+			$("select#country").change(function() {
+				if ($(this).val() == '0') {
+					$("select#state").html("<option>Select a model</option>");
+					$("select#state").attr('disabled', true);
+				}
+				else {
+					var url = "all_json_models/;
+					var state = $(this).val();
+					$.getJSON(url, function(models) {
+						var options = '<option value="0">Select a Country</option>';
+						for (var i = 0; i < states.length; i++) {
+							options += '<option value="' + state[i].pk + '">' + states[i].fields['state'] + '</option>'}
+							
+							$("select#state").html(options);
+							$("select#state option:first").attr('selected', 'selected');
+							$("select#state").attr('disabled', false);
+							});
+					}
+			});
+
+		}
+$("select#state").change(function(vent) {
+if ($(this).val() == -1) {
+return;
+}
+myAwesomeFunctionToCallWhenAModelIsSelected();
+});
+});
+}
+</script>
+<!--<script>
+
+    $("#id_country").change(function () {
+      var url = $("#personForm").attr("data-cities-url");  // get the url of the `load_cities` view
+      var countryId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'country': countryId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_state").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+        failure: function(data) { 
+        alert('Got an error dude');
+    }
+      });
+
+    });
+</script>-->
+
+
+{% endblock %}

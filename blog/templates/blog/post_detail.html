@@ -18,22 +18,51 @@
         {% if post.image %}
             <img src="{{ post.image.url}}" height="250" width="400">
         {% endif %}
+    </div>
         <hr>
-        <a class="btn btn-default" href="{% url 'blog:add_comment_to_post' pk=post.pk %}">Add comment</a>
+        <div class="comment">
+            <h1>New comment</h1>
+            <form method="POST" class="post-form">{% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="save btn btn-default">Send</button>
+            </form>
+        </div>
+    
         {% for comment in post.comments.all %}
-            {% if   comment.approved_comment %}
-                <div class="comment" style="background-color: powderblue">
+            {% if user.is_authenticated  %}
+                <div class="comment">
                     <div class="date">
                         {{ comment.created_date }}
-                            {% if not comment.approved_comment %}
-                                <a class="btn btn-default" href="{% url 'blog:comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
-                                <a class="btn btn-default" href="{% url 'blog:comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
-                            {% endif %}
+                            
                     </div>
                     <strong>{{ comment.author }}</strong>
-                    <p>{{ comment.text|linebreaks }}</p>  
+                    <p>{{ comment.text|linebreaks }}</p>
+                
+                    <div class="comment">
+                        {% for replay in comment.replies.all %}
+                        <p class="info">{{ replay.author }} | {{ replay.created }}</p>
+                        <li>{{ replay.text }}</li>    
+                        {% endfor %}
+                    
+                        <form  method="post">
+                        {{ form.as_p }}
+                        {% csrf_token %}
+             
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <input class="btn btn-primary" type="submit" value="Replay">
+                        </form>
+                    </div>
 
-                    {% for replay in comment.replies.all %}
+                </div>
+            {% endif %}
+            {% empty %}
+            <p>No comments here yet :(</p>
+    {% endfor %}
+
+        
+    
+{% endblock %}
+                 <!--   {% for replay in comment.replies.all %}
                     <p class="info">{{ replay.author }} | {{ replay.created }}</p>
                     <li>{{ replay.text }}</li>    
                     {% endfor %}
@@ -41,16 +70,13 @@
                     <form  method="post">
                     {{ form.as_p }}
                     {% csrf_token %}
-                    <!-- Hidden input for parent comment.id -->
+                    Hidden input for parent comment.id 
                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
                     <input class="btn btn-primary" type="submit" value="Replay">
-                    </form>  
+                    </form>  -->
 
-                </div>
-            {% endif %}
+               
+            
                 
-                    {% empty %}
-                    <p>There are no comments yet.</p>
-        {% endfor %}
-    </div>
-{% endblock %}
+                   
+        

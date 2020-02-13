@@ -94,36 +94,44 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_new.html', {'form': form})
 
-def post_detail(request, pk):
+"""def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     print(post.author)
     user = request.user
     print(user)
-    return render(request, 'blog/post_detail.html', {'post': post,"user":user})
+    return render(request, 'blog/post_detail.html', {'post': post,"user":user})"""
 
-"""def post_detail(request, pk):
+def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    comment = post.comments.filter( parent__isnull= True)
+    comment = post.comments.filter(active=True, reply__isnull= True)
     if request.method == "POST":
         comment_form = CommentForm(request.POST or None)
         if comment_form.is_valid():
-            parent_id = request.POST.get('comment_id')
+            reply_id = request.POST.get('comment_id')
             comment_os = None
-            if parent_id:
-                comment_os = Comment.objects.get(id=parent_id)  
+            if reply_id:
 
-            comment = Comment.objects.create(post=post,parent=comment_os)
-            comment.save()
+                comment_os = Comment.objects.get(id = reply_id)
+                if comment_os:
+                    reply_comment = comment_form.save(commit=False)
+                    reply_comment.reply = comment_os
+                  
+            
+            new_commet = comment_form.save(commit=False)
+            new_commet.post = post
+            new_commet.save()
 
             
             return redirect('blog:post_detail',pk=post.pk)
 
     form = CommentForm()
-    print(post.author)
+    
     user = request.user
-    print(user)
+    
     return render(request, 'blog/post_detail.html', 
-        {'post': post,"user":user,'form':form,'comment':comment})"""
+        {'post': post,"user":user,'form':form,'comment':comment})
+
+
 
 def myblogs(request):
     user = request.user
@@ -136,7 +144,7 @@ def myblogs(request):
 
 
 #----to add comment on blog post---functions---->**********
-def add_comment_to_post(request, pk):
+"""def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -147,7 +155,7 @@ def add_comment_to_post(request, pk):
             return redirect('blog:post_detail', pk=post.pk)
     else:
         form = CommentForm()
-    return render(request, 'blog/add_comment_to_post.html', {'form': form})
+    return render(request, 'blog/add_comment_to_post.html', {'form': form})"""
 
 
 def approved_comments(self):
