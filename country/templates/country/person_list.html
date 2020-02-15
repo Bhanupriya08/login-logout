@@ -13,55 +13,50 @@
     <button type="submit">Save</button>
     <a href="{% url 'country:person_list' %}">Nevermind</a>
   </form>
-
+  <p>Double click me</p>
   <div>
   	
   	<form action="" method="get" accept-charset="utf-8">
 <select name="country" id="country">
-	<option value="0">Select a country</option>
+	
 	{% for country in country_list %}
-	<option value="{{ country.id}}">{{ country.country }}</option>
+	<option value="{{ country.country}}">{{ country.country }}</option>
 	{% endfor %}
 </select>
-<select name="state" id="state" disabled="true">
-<option>Select a state</option>
+<select name="state" id="state" >
+  
 </select>
 </form>
   </div>
+<script  src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <script>
-	
-	$(document).ready(
-		function() {
-			$("select#country").change(function() {
-				if ($(this).val() == '0') {
-					$("select#state").html("<option>Select a model</option>");
-					$("select#state").attr('disabled', true);
-				}
-				else {
-					var url = "all_json_models/;
-					var state = $(this).val();
-					$.getJSON(url, function(models) {
-						var options = '<option value="0">Select a Country</option>';
-						for (var i = 0; i < states.length; i++) {
-							options += '<option value="' + state[i].pk + '">' + states[i].fields['state'] + '</option>'}
-							
-							$("select#state").html(options);
-							$("select#state option:first").attr('selected', 'selected');
-							$("select#state").attr('disabled', false);
-							});
-					}
-			});
+  $(document).ready(function(){
+    $('#country').change(function () {
+      var country_name = $(this).val();
+      
 
-		}
-$("select#state").change(function(vent) {
-if ($(this).val() == -1) {
-return;
-}
-myAwesomeFunctionToCallWhenAModelIsSelected();
-});
-});
-}
+      console.log(country_name);
+      
+      
+      
+
+    $.ajax({
+      
+      url : 'getdetails/',
+      data:{
+        'country' : country_name
+      },
+      success:function(result){
+         $("#state option").remove();
+                            for (var i = result.length - 1; i >= 0; i--) {
+                                $("#state").append('<option>'+ result[i].name +'</option>');
+                            };
+      }
+    })
+    }); 
+   });
+
 </script>
 <!--<script>
 
@@ -83,6 +78,43 @@ myAwesomeFunctionToCallWhenAModelIsSelected();
       });
 
     });
+
+
+     '/country/getdetails/',data,type,function(result_set){
+
+        console.log(result);
+        $("option#state ").remove();
+        for (var i = result.length - 1; i >= 0; i--){
+          $("#state").append('<option>'+ result[i].name +'</option>');
+        };
+
+                         });
+
+
+
+
+
+
+
+                           $(document).ready(function(){
+    $('#country').change(function () {
+      var country_name = $(this).val();
+      
+
+      console.log(country_name);
+      data = {'cnt' : country_name };
+      type = "POST"
+      console.log(data);
+
+    $.ajax('getdetails/',data,type,function(result_set){
+      console.log(result_set);
+      
+      $('#state').html(result_set);
+
+
+                         });
+    }); 
+   });
 </script>-->
 
 

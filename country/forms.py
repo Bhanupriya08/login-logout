@@ -1,5 +1,5 @@
 from django import forms
-from .models import Person, State
+from .models import Person, State,Book
 
 
 class PersonForm(forms.ModelForm):
@@ -21,5 +21,12 @@ class PersonForm(forms.ModelForm):
         elif self.instance.pk:
             self.fields['state'].queryset = self.instance.country.state_set.order_by('name')
 
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ('title', 'author', 'file')
+    
 
 #State.objects.filter(state_id=country_id).order_by('name')

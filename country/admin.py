@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Country,State,Person
+from .models import Country,State,Person,Book
 
 # Register your models here.
 class CountryAdmin(admin.ModelAdmin):
@@ -17,6 +17,6 @@ class StateAdmin(admin.ModelAdmin):
 	
 admin.site.register(State,StateAdmin)
 admin.site.register(Person)
-
+admin.site.register(Book)
 
 

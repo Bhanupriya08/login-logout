@@ -1,0 +1,29 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<h1>Upload List</h1>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Download</th>
+		</tr>
+		
+	</thead>
+	<tbody>
+		{% for book in books %}
+		<tr>
+			<td>{{ book.title}}</td>
+			<td>{{ book.author}}</td>
+			<td>
+				<a href="{{ book.file.url }}" target="_blank"  class='btn btn-primary btn-small'>Download file</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>	
+		
+</table>
+
+<h2><a href="{% url 'country:uploadfile' %}">Upload book</a></h2>
+
+{% endblock %}

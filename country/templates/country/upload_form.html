@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<h1>Upload book</h1>
+<form method="POST" enctype="multipart/form-data">
+	{{ form.as_p}}
+	{% csrf_token %}
+	<button type="submit" class="btn btn-primary">Upload</button>
+	
+</form>
+<h2><a href="{% url 'country:book_list' %}"> booklist</a></h2>
+{% endblock %}

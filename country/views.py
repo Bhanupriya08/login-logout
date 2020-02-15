@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
-from .models import Person,Country,State
-from .forms import PersonForm
+from .models import Person,Country,State,Book
+from .forms import PersonForm , BookForm
 from django.core import serializers
 from django.http import HttpResponse
+import json as simplejson
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 
@@ -18,6 +20,40 @@ def all_json_models(request, brand):
 	models = State.objects.all().filter(country_id=current_country)
 	json_models = serializers.serialize("json", models)
 	return HttpResponse(json_models)
+
+def getdetails(request):
+    #country_name = request.POST['country_name']
+    if request.is_ajax():
+    	country_name =  request.GET['country']  
+    	#print(country_name)
+    	result_set = []
+    	all_cities = []
+    	country = str(country_name)
+    	#print(answer)
+    	selected_country = Country.objects.get(country=country)
+    	print(selected_country)
+    	all_states = selected_country.state_set.all()
+    	for state in all_states:
+        	print (state.state)
+        	result_set.append({'name': state.state})
+    	return HttpResponse(simplejson.dumps(result_set),content_type='application/json')
+
+#******to upload file *****
+
+def upload(request):
+	if request.method == 'POST':
+		form = BookForm(request.POST,request.FILES)
+		if form.is_valid():
+			form.save()
+			return redirect("country:book_list")
+
+	form = BookForm()
+	return render(request,'country/upload_form.html',{'form':form})
+
+
+def booklist(request):
+	books = Book.objects.all()
+	return render(request,'country/book_list.html',{'books':books})
 
 
 
