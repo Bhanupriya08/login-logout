@@ -55,7 +55,7 @@ def booklist(request):
 	books = Book.objects.all()
 	return render(request,'country/book_list.html',{'books':books})
 
-
+#***********uplod file ends here*********
 
 def person(request):
 	form = PersonForm(request.POST)
@@ -94,3 +94,11 @@ class PersonUpdateView(UpdateView):
     form_class = PersonForm
     #fields = ('name', 'birthdate', 'country', 'state')
     success_url = reverse_lazy('person_list')"""
+
+
+#*******************crud with ajax*******
+
+class CrudView(ListView):
+    model = Person
+    template_name = 'crud_ajax/ajaxForm.html'
+    context_object_name = 'users'

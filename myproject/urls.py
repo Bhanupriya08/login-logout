@@ -22,6 +22,7 @@ from django.views.generic.base import TemplateView
 urlpatterns = [
 	path('home/', TemplateView.as_view(template_name='blog/home.html'), name='home'),
     path('admin/', admin.site.urls),
+    #path('country-admin/',country_admin_site.urls),
     path('',include('blog.urls')),
     path('country/',include('country.urls')),
     path('', include('django.contrib.auth.urls')),

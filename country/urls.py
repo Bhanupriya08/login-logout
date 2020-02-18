@@ -12,6 +12,7 @@ urlpatterns = [
     path('getdetails/',views.getdetails),
     path('uploadfile/',views.upload,name='uploadfile'),
     path('booklist/',views.booklist,name='book_list'),
+    path('crud/',  views.CrudView.as_view(), name='crud_ajax'),
     #path('add/', views.PersonCreateView.as_view(), name='person_add'),
     #path('<int:pk>/', views.PersonUpdateView.as_view(), name='person_change'),
 
