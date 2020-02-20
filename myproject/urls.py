@@ -26,4 +26,5 @@ urlpatterns = [
     path('',include('blog.urls')),
     path('country/',include('country.urls')),
     path('', include('django.contrib.auth.urls')),
+    path('oauth/', include('social_django.urls', namespace='social')),
 ]+static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

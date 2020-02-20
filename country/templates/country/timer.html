@@ -1,0 +1,57 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<h2>Timer</h2>
+<h1><p id='time'></p></h1>
+
+
+<script  src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!--<script type="text/javascript">
+	function countDown(secs,elem) {
+		var element = document.getElementById(elem);
+		element.innerHTML = 'resend otp after '+secs ;
+		if (secs<1){
+			clearTimeout(timer);
+			element.innerHTML = '<h2>Countdown Complete!</h2>';
+			element.innerHTML += '<a href="#">Resend Otp</a>';
+
+		}
+
+		secs--;
+		var timer = setTimeout('countDown('+secs+',"'+elem+'")',1000);
+	}
+</script>-->
+
+<script type="text/javascript">
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.text(minutes + ":" + seconds);
+
+        if (timer < 1) {
+        	clearTimeout(timer);
+        	document.getElementById('time').innerHTML= '<h2><a href="{% url 'country:person_list'%}">Countdown Complete!</a></h2>';
+
+            
+        }
+        --timer;
+    }, 1000);
+}
+
+jQuery(function ($) {
+    var fiveMinutes = 60*5 ,
+        display = $('#time');
+    startTimer(fiveMinutes, display);
+});
+</script>
+<script type="text/javascript">countDown(15,"timer")</script>
+{% endblock %}

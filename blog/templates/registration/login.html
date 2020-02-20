@@ -11,4 +11,6 @@
   <button type="submit">Login</button>
   <a href="{%  url 'blog:password_reset'%}">Reset password</a>
 </form>
+
+ <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
 {% endblock %}

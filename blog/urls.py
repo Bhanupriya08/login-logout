@@ -37,4 +37,6 @@ urlpatterns = [
     path('subscribe/',views.subscribe,name='subscribe'),
     #path('country/',include('country.urls'))
     #path('login/')
+
+    path('oauth/', include('social_django.urls', namespace='social')),
 ]

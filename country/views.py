@@ -102,3 +102,9 @@ class CrudView(ListView):
     model = Person
     template_name = 'crud_ajax/ajaxForm.html'
     context_object_name = 'users'
+
+
+
+#***********Timer***********
+def timerFun(request):
+	return render(request,'country/timer.html')
